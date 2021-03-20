@@ -1,6 +1,8 @@
-import { Redirect, Route, Switch } from "react-router-dom";
+import React from "react";
+import { Route, Redirect, Switch } from "react-router-dom";
 
 export default function RouteWithSubRoutes(route) {
+  // const {name, path, icon, redirect, component, hideChildrenInMenu, ...otherProps} = route
   if (route.redirect) {
     return <Redirect exact from={route.path} to={route.redirect} />;
   } else if (route.component) {
@@ -21,14 +23,24 @@ export default function RouteWithSubRoutes(route) {
 }
 
 function handleSubRoute(item) {
+  //map the children routes
   return (
     <Switch key={`item-${item.path}`}>
       {item.routes.map((sub, i) => {
+        // console.log(sub,i)
         if (sub.redirect) {
-          return <Redirect exact from={sub.path} to={sub.redirect} />;
+          return (
+            <Redirect
+              exact
+              key={`sub-${i}`}
+              from={sub.path}
+              to={sub.redirect}
+            />
+          );
         } else if (sub.component) {
           return (
             <Route
+              key={`sub-${i}`}
               name={sub.name}
               breadcrumbName={sub.name}
               path={sub.path}
